@@ -183,7 +183,7 @@ def present_area_chart():
     st.area_chart(df_race_year)
 
 
-# ------------------------------------#
+# -----------------------------------#
 
 side_bar()
 
