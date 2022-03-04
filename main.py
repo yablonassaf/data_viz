@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+from streamlit_disqus import st_disqus
 
 
 def read_data():
@@ -16,7 +17,8 @@ def present_dataset():
                 "The Following Charts Provide Various Angles to Look at the Dataset  </h4>", unsafe_allow_html=True)
 
     st.markdown("<h5 style='text-align: center; color: grey;'>"
-                "The data used to produce the visuals can be discovered by checking this box:  </h5>", unsafe_allow_html=True)
+                "The data used to produce the visuals can be discovered by checking the box:  </h5>",
+                unsafe_allow_html=True)
 
     global chart_data
     st.markdown('')
@@ -66,6 +68,7 @@ def add_line_chart_by_years():
                 "It can be seen that some programs have been expanded more than others. </h5>", unsafe_allow_html=True)
     st.markdown('''---''')
 
+
 def show_video():
     st.video('https://www.youtube.com/watch?v=_VnBOY5SRfM&t=1s')
     st.markdown('''---''')
@@ -74,6 +77,8 @@ def show_video():
 def show_bar_plot(main_df):
     st.markdown("<h4 style='text-align: center; color: white;'>"
                 "Number of Students per Year at the Harvard Kennedy School  </h4>", unsafe_allow_html=True)
+    st.markdown("<h5 style='text-align: center; color: grey;'>"
+                "Break down by program  </h5>", unsafe_allow_html=True)
     st.markdown('')
 
     program = get_program()
@@ -87,7 +92,7 @@ def show_bar_plot(main_df):
     )
     st.plotly_chart(fig)
     st.write("Number of students at the MPA2 program has nearly "
-             "doubled between 2020-2021; see for yourself")
+             "doubled between 2020-2021.")
     st.markdown('''---''')
 
 
@@ -96,7 +101,7 @@ def get_program():
         'program': ["All", "MPP", "MPAID", "MPA2", "MCMPA"],
     })
     option = st.selectbox(
-        'Choose Program to Explore:',
+        'Choose Program:',
         programs_df['program'])
     'Program selected: ', option
     return option
@@ -123,6 +128,8 @@ def get_ethnicity_per_year(main_df):
     fig = px.pie(yearly_df, values='Total_Students', names='Race/Ethnicity',
                  color_discrete_sequence=px.colors.sequential.RdBu)
     st.plotly_chart(fig)
+    st.write("While the majority of the students are white, "
+             "the number has decreased consistently since 2018.")
 
 
 def side_bar():
@@ -183,10 +190,54 @@ def get_race_df(races):
 
 def present_area_chart():
     st.markdown('''---''')
+    st.markdown("<h4 style='text-align: center; color: white;'>"
+                "Diversity Comparison. This Chart Enables to Compare How "
+                "Different Ethnicities are Represented at HKS</h4>", unsafe_allow_html=True)
     st.markdown('''''')
     races_list = get_ethnicities()
     df_race_year = get_race_df(races_list)
     st.area_chart(df_race_year)
+
+
+def present_summary():
+    st.write('''---''')
+
+    st.markdown("<h2 style='text-align: center; color: white;'>"
+                "Summary</h2>", unsafe_allow_html=True)
+    st.markdown('''''')
+    st.markdown('''''')
+    black20 = get_number_of_students_per_year(df, "Black or African American", 2020)
+    black21 = get_number_of_students_per_year(df, "Black or African American", 2021)
+    black_change = int(((black21 - black20) / black20) * 100)
+    white20 = get_number_of_students_per_year(df, "White", 2020)
+    white21 = get_number_of_students_per_year(df, "White", 2021)
+    white_change = int(((white21 - white20) / white20) * 100)
+    df_year_students = student_per_year_df(df, "MPA2")
+    total_mpas_2020 = df_year_students.loc[2]['Students']
+    total_mpas_2021 = df_year_students.loc[3]['Students']
+    mpas_change = int(((total_mpas_2021 - total_mpas_2020) / total_mpas_2021) * 100)
+    df_year_students = student_per_year_df(df, "MPP")
+    total_mpps_2020 = df_year_students.loc[2]['Students']
+    total_mpps_2021 = df_year_students.loc[3]['Students']
+    mpps_change = int(((total_mpps_2021 - total_mpps_2020) / total_mpps_2021) * 100)
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Black or African American", black21, str(black_change) + "%")
+    white_change = "-" + str(white_change) + "%"
+    col2.metric("White Students", white21, white_change)
+    col3.metric("MPA Students", total_mpas_2021, str(mpas_change) + "%")
+    col4.metric("MPP Students", total_mpps_2021, str(mpps_change) + "%")
+
+
+def additional_information():
+    st.write('''---''')
+    if st.button('Additional Information'):
+        st.write(
+            "This website was created as a final project for class DPI-852M: Advanced Data and Information Visualization"
+            " taught at the Harvard Kennedy School [(link)](https://www.hks.harvard.edu/courses/advanced-data-and-information-visualization)."
+            " The dataset was provided by HKS. For more information, please navigate to the class website, or contact the author on [linkedin](https://www.linkedin.com/in/yablonassaf/). Thank you!")
+        st.snow()
+        st.success('Please consider to leave a comment!')
+        st_disqus("assaf")
 
 
 # -----------------------------------#
@@ -208,3 +259,7 @@ show_bar_plot(df)
 get_ethnicity_per_year(df)
 
 present_area_chart()
+
+present_summary()
+
+additional_information()
