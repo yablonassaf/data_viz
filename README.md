@@ -1,5 +1,5 @@
 # data_viz
-DPI 852M: Advanced Data and Information Visualization
+DPI 852M: Advanced Data and Information Visualization, Spring 2022
 
 Final Project - Python Track.
 
