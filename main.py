@@ -15,9 +15,12 @@ def present_dataset():
     st.markdown("<h4 style='text-align: center; color: white;'>"
                 "The Following Charts Provide Various Angles to Look at the Dataset  </h4>", unsafe_allow_html=True)
 
+    st.markdown("<h5 style='text-align: center; color: grey;'>"
+                "The data used to produce the visuals can be discovered by checking this box:  </h5>", unsafe_allow_html=True)
+
     global chart_data
     st.markdown('')
-    if st.checkbox('Click to Show Data Used'):
+    if st.checkbox('Click to Show Data'):
         chart_data = pd.DataFrame(df)
         chart_data
     st.markdown('')
@@ -49,16 +52,19 @@ def student_per_year_df(df_internal, program):
 def add_line_chart_by_years():
     st.markdown('''---''')
     st.markdown("<h4 style='text-align: center; color: white;'>"
-                "Let us examine the changes in programs through the years </h4>", unsafe_allow_html=True)
+                "Let us examine the changes in programs through the years: </h4>", unsafe_allow_html=True)
     st.markdown('')
-    global chart_data
     df2 = df.groupby(['Year']).sum()
     df2["Year"] = ["2018", "2019", "2020", "2021"]
     df2 = df2.set_index('Year')
     chart_data = pd.DataFrame(df2)
     st.line_chart(chart_data)
+    st.write('')
+    st.markdown("<h5 style='text-align: center; color: grey;'>"
+                "This visual provides a high-level perspective vis-a-vis the student count"
+                " at the Harvard Kennedy School across the different programs. "
+                "It can be seen that some programs have been expanded more than others. </h5>", unsafe_allow_html=True)
     st.markdown('''---''')
-
 
 def show_video():
     st.video('https://www.youtube.com/watch?v=_VnBOY5SRfM&t=1s')
