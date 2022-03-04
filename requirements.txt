@@ -1,6 +1,6 @@
 ###### Requirements without Version Specifiers ######
 plotly
 streamlit-disqus
-utils
-
-
+httplib2
+altair
+pandas
