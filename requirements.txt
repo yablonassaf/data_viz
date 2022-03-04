@@ -1,5 +1,6 @@
 ###### Requirements without Version Specifiers ######
 plotly
 streamlit-disqus
+utils
 
 
