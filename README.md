@@ -3,7 +3,7 @@ DPI 852M: Advanced Data and Information Visualization, Spring 2022
 
 Final Project - Python Track.
 
-Assaf Yablon
+Author: Assaf Yablon https://www.linkedin.com/in/yablonassaf/
 
 Link:
 https://tinyurl.com/3ydwb58f
